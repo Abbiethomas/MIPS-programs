@@ -1,0 +1,56 @@
+#Homework 3 test
+
+.data
+A: .word 4
+B: .word 3
+I: .word 0
+J: .word 0
+D: .word 0, 0
+
+.text
+main:
+#pointers
+lw $s0, A
+lw $s1, B
+lw $t0, I
+lw $t1, J
+la $s2, D
+li $t6, 0
+
+
+Loop:
+beq $s0, $t0, Print
+addi $t0, $t0, 1 	#i++
+li $t1, 0 		#j = 0
+j Loop2
+
+
+Loop2: 
+beq $s1, $t1, Loop
+addi $t2, $t0, -1 	#undo premature i++
+add $t3, $t2, $t1	#i + j
+mul $t3, $t3, 4 	#multiply by 4 for address
+la $s3, D
+add $s3, $s3, $t3
+li $t4, 10
+sw $t4, 0($s3)		#write
+
+addi $t1, $t1, 1 	#j++
+j Loop2
+
+Print:
+li $t5, 7
+ble $t5, $t6, Exit
+li $v0, 1
+lw $t7, 0($s2)
+move $a0, $t7
+syscall
+
+addi $s2, $s2, 4
+addi $t6, $t6, 1
+
+j Print
+
+Exit:
+li $v0, 10
+syscall

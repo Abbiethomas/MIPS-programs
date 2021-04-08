@@ -1,0 +1,50 @@
+#Write a program that compare two single precision floating point numbers 
+#numA and numB. If numA is greater than numB, Swap the numbers.
+
+.data
+numA: .float 0.3 
+numB: .float 5.2
+yes: .asciiz "Swapped"
+no: .asciiz "Not Swapped"
+
+.text
+main:
+
+#load floats
+la $t0, numA
+l.s $f0, 0($t0)
+
+la $t1, numB
+l.s $f1, 0($t1)
+
+#Compare floats
+c.lt.s $f0, $f1
+bc1f swap
+
+#print
+li $v0, 4
+la $a0, no
+syscall
+
+j exit
+
+
+#swap floats
+swap: 
+s.s $f0, 0($t1)
+s.s $f1, 0($t0)
+
+#print
+li $v0, 4
+la $a0, yes
+syscall
+
+j exit
+
+
+
+#end program
+exit:
+li $v0,10
+syscall
+

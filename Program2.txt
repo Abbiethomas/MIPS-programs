@@ -1,0 +1,53 @@
+#Program 2
+#March 6, 2021
+#Abbie Thomas 811846546
+#Write a MIPS assembly language program that finds maximum element in an array of 
+#integers. Print the Result Array. 
+
+.data
+arr: .word 10, 3, 45, 90, 12
+max: .word 10
+length: .word 5
+result: .asciiz "Largest in given array is "
+
+.text
+main:
+#load values	
+la $s0, arr 	#arr
+la $t1, max
+lw $s1, 0($t1)	#max
+la $t2, length
+lw $s2, 0($t2)	#length
+li $t0, 1	#i
+
+#For loop
+For:
+beq $t0, $s2, Exit
+
+#increment
+addi $t0, $t0, 1
+addi $s0, $s0, 4
+lw $t3, 0($s0)		#arr[i]
+
+bgt $t3, $s1, Replace	#if arr[i] > max, max = arr[i]
+j For
+
+#Replace max value
+Replace:
+add $s1, $t3, $zero
+j For
+
+#Print and Exit
+Exit:
+sw $s1, 0($t1) #save max value
+
+li $v0, 4
+la $a0, result
+syscall
+
+li $v0, 1
+move $a0, $s1
+syscall
+
+li $v0, 10
+syscall

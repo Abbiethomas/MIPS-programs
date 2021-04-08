@@ -1,0 +1,67 @@
+#Program 3
+#March 27, 2021
+#Abbie Thomas 811846546
+#Write a MIPS assembly language program that can search for a number(any 
+#arbitrary number) in an array with 20 integer numbers and prints the index of 
+#the number in the array if it is found and -1 if not found.
+
+.data
+arr: .word 19, 0, -30, 100, 2481, -3, -15, 7, 20, 10, 15, 104, -40, -194, 82, 29, -14, 89, 29, 57
+len: .word 20
+target: .word -3
+result: .asciiz "Index of "
+result2: .asciiz " is "
+result3: .asciiz "\nIf index = -1, integer not found"
+
+
+.text
+main:
+#load values
+la $s0, arr	#arr address
+la $t0, len
+lw $s1, 0($t0)	#len
+la $t0, target
+lw $s2, 0($t0)	#target
+li $t1, -1	#index of desired int
+li $t2, 0	#i
+
+#for loop
+For:
+beq $t2, $s1, Exit	#if i == len, exit
+lw $t3, 0($s0) 		#arr[i]
+beq $t3, $s2, Found	#if arr[i] == target, found
+
+#increment i and array
+addi $t2, $t2, 1
+addi $s0, $s0, 4		
+j For
+
+Found:
+add $t1, $t2, $zero
+j Exit
+
+
+#Print and Exit
+Exit:
+li $v0, 4
+la $a0, result
+syscall
+
+li $v0, 1
+move $a0, $s2
+syscall
+
+li $v0, 4
+la $a0, result2
+syscall
+
+li $v0, 1
+move $a0, $t1
+syscall
+
+li $v0, 4
+la $a0, result3
+syscall
+
+li $v0, 10
+syscall

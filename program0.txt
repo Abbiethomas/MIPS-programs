@@ -1,0 +1,15 @@
+.globl main
+
+main:	
+	addi $t0, $zero, 15 #li $t0, 15
+	addi $t1, $zero, 10 #li $t1, 10
+	add $t3, $t0, $t1
+
+#Printing result
+	li $v0, 1 #system call code for print_int
+	move $a0, $t3
+	syscall
+
+#End
+	li $v0, 10
+	syscall

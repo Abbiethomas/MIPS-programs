@@ -1,0 +1,44 @@
+# Program to execute: f = (g + h) + (i + j)
+
+.data
+str:.asciiz "My result is: "
+g: .word 5 
+h: .word 7
+i: .word 1
+k: .word 2
+f: .word 0	
+
+.text
+main:
+# load address of all variables
+la $t0,g
+la $t1,h
+la $t2,i
+la $t3,k
+la $t4,f
+
+#lw each variable and add
+lw $t5,0($t0)
+lw $t6,0($t1)
+add $s0, $t5, $t6
+lw $t7,0($t3)
+lw $t8,0($t2)
+add $s1, $t8, $t7
+add $s2, $s1, $s0 
+
+#$v0=4 means print string. argument will be a string’s address
+li $v0,4
+la $a0,str
+syscall
+
+#$v0=1 means print int. argument will be int ($s2 is the answer)
+li $v0,1
+move $a0,$s2
+syscall
+
+#save answer into f ($t4 has address of f)
+sw $s2,0($t4)
+
+#end program
+li $v0,10
+syscall

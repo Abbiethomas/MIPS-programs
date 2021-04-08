@@ -1,0 +1,55 @@
+#Homework 4 Question 3
+#Write a procedure to calculate Average of numbers(integers) using Arrays. 
+#Send base address of array in register $a1 and  Array length in register $a2 
+#to the procedure and return Average in register $v0 to main program.
+
+.data
+A: .word 15, 10, 15, 20
+len: .word 4
+
+.text
+main:
+#pointer
+la $a1, A
+la $t1, len
+lw $a2, 0($t1)
+li $v0, 0
+jal average
+
+#print
+move $a0, $v0
+li $v0, 1
+syscall
+
+li $v0, 10
+syscall
+
+average:
+#push
+addi $sp, $sp, -8
+sw $ra, 0($sp)
+sw $a2, 4($sp)
+
+#check length
+slti $t0, $a2, 1 #if length < 1
+beq $t0, $zero, loop
+
+loop:
+addi $a2, $a2, -1 #decrement length
+lw $t2, 0($a1)
+add $v0, $t2, $v0 
+addi $a1, $a1, 4 #increment array address
+
+#check that length > 0
+slti $t0, $a2, 1 #if length < 1
+beq $t0, $zero, loop
+
+#pop
+lw $ra, 0($sp)
+lw $a2, 4($sp)
+addi $sp, $sp, 8
+
+#divide total by length
+div $v0, $v0, $a2
+
+jr $ra

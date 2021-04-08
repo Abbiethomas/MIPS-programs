@@ -1,0 +1,85 @@
+#Program 1
+#February 28, 2021
+#Abbie Thomas 811846546
+#Write a MIPS assembly language program that subtracts two arrays with ten elements 
+#(element-by-element subtraction) and save them in an array. Print the Result Array.
+
+.data
+A: .word 10, 5, 6, 15, 17, 19, 25, 30, 12, 56
+B: .word 4, 15, 16, 5, 7, 9, 15, 10, 22, 6
+C: .word 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+length: .word 10
+result: .asciiz "Result is: ["
+comma: .asciiz ", "
+endB: .asciiz "]"
+
+.text
+main:
+la $s0, A
+la $s1, B
+la $s2, C
+
+li $t0, 0 #i
+
+la $t2, length
+lw $t1, 0($t2) #length
+
+
+#for loop
+Loop:
+beq $t0, $t1, Print
+
+lw $t3, 0($s0) #A[i]
+lw $t4, 0($s1) #B[i]
+sub $s3, $t3, $t4
+sw $s3, 0($s2) #C[i]
+
+addi $s0, $s0, 4
+addi $s1, $s1, 4
+addi $s2, $s2, 4
+addi $t0, $t0, 1
+
+j Loop
+
+
+#Print open bracket and C[0] -> C[len-2] comma separated
+Print:
+li $v0, 4
+la $a0, result
+syscall
+
+li $t0, 0 #i = 0
+la $s2, C
+
+Loop2:
+addi $t5, $t1, -1
+beq $t0, $t5, Exit
+li $v0, 1
+lw $t6, 0($s2)
+move $a0, $t6
+syscall
+
+addi $s2, $s2, 4
+addi $t0, $t0, 1
+
+li $v0, 4
+la $a0, comma
+syscall
+
+j Loop2
+
+
+#print C[len-1] and end bracket, Exit
+Exit:
+li $v0, 1
+lw $t6, 0($s2)
+move $a0, $t6
+syscall
+
+li $v0, 4
+la $a0, endB
+syscall
+
+li $v0, 10
+syscall
+

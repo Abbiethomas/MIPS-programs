@@ -1,0 +1,48 @@
+#for(int i = 0; i < A.length; i++)
+#c[i] = A[i] + B[i];
+#three arrays (all same length)
+#adding each element of A and B, sum in C
+
+.data
+A: .word 5, 3, -2, 10
+B: .word 9, 8, 6, -1
+C: .word 0, 0, 0, 0
+Length: .word 4
+
+.text
+main:
+#pointers A, B, C
+la $t0, A #load address
+la $t1, B
+la $t3, C
+
+li $t8, 0 # i = 0
+
+#first, load address, then use that to load word
+la $t2, Length
+lw $t7, 0($t2) #pseudo: lw $t7, Length
+
+#for loop
+Loop:
+beq $t8, $t7, Exit
+#both are good for checking i	
+#slt $t6, $t8, $t7
+#beq $t6, $zero, Exit
+
+lw $s0, 0($t0) #read A[i]
+lw $s1, 0($t1) #read B[i]
+add $s3, $s0, $s1 
+sw $s3, 0($t3) #write C[i]
+
+#increment addresses	  
+addi $t0, $t0, 4
+addi $t1, $t1, 4
+addi $t3, $t3, 4
+addi $t8, $t8, 1
+j Loop
+
+#Exit
+Exit: 
+li $v0, 10
+syscall
+
